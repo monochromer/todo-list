@@ -1,0 +1,8 @@
+.VisuallyHidden {
+  &:not(:focus) {
+    position: fixed;
+    transform: scale(0);
+    width: 1px;
+    height: 1px;
+  }
+}

@@ -1,0 +1,31 @@
+@charset 'utf-8';
+
+@import './assets/fonts/pt-root-ui-vf/pt-root-ui_vf.css';
+
+:root {
+  --color-text: oklch(0.22 0 0);
+  --color-background: oklch(1 0 0);
+  --color-accent: oklch(0.74 0.15 235.73);
+  --color-danger: oklch(0.62 0.22 26.47);
+  --color-fade: oklch(0.8 0 0);
+  --color-fade-2: oklch(0.64 0 0);
+
+  --font-size-base: 18;
+
+  color: var(--color-text);
+  background-color: var(--color-background);
+  font-size: calc(var(--font-size-base) / 16 * 1rem);
+  line-height: 1;
+  font-weight: 480;
+  font-family: 'PT Root UI', sans-serif;
+  color-scheme: light dark;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+}

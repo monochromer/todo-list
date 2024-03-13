@@ -1,0 +1,45 @@
+.Checkbox {
+  all: unset;
+  position: relative;
+  box-sizing: border-box;
+  width: calc(24 / var(--font-size-base) * 1rem);
+  aspect-ratio: 1;
+  border: 1px solid var(--color-fade);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+  transition-property: color, box-shadow, border, background;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: calc(8 / 16 * 1rem);
+    bottom: calc(5 / 16 * 1rem);
+    opacity: 0;
+    rotate: 45deg;
+    scale: 0;
+    box-sizing: border-box;
+    width: calc(5 / 16 * 1rem);
+    height: calc(12 / 16 * 1rem);
+    border-style: solid;
+    border-color: oklch(1 0 0);
+    border-width: 0 1px 1px 0;
+    transition: 0.3s cubic-bezier(0.61, 0.46, 0.27, 1.82);
+  }
+
+  &:checked {
+    border-color: transparent;
+    background-color: var(--color-accent);
+    color: oklch(1 0 0);
+
+    &::after {
+      opacity: 1;
+      scale: 1;
+    }
+  }
+
+  &:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-accent), transparent 70%);
+  }
+}

@@ -1,0 +1,44 @@
+.Layout {
+  margin: auto;
+  max-width: calc(480 / var(--font-size-base) * 1rem);
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-inline: 1rem;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    'title'
+    'main'
+    'form'
+  ;
+}
+
+.Layout\:\:Title {
+  grid-area: title;
+  margin: 0;
+  padding-block-start: 1rem;
+  padding-block-end: 2rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.Layout\:\:Form {
+  container-type: inline-size;
+  grid-area: form;
+  position: sticky;
+  z-index: 1;
+  bottom: 0;
+  display: flex;
+  flex-direction: column-reverse;
+  box-sizing: border-box;
+  gap: 1rem;
+  padding-block: 1rem;
+  border-top: 1px solid var(--color-fade);
+  background-color: color-mix(in oklch, var(--color-background), transparent 20%);
+  backdrop-filter: blur(4px);
+}
+
+.Layout\:\:Main {
+  grid-area: main;
+}

@@ -1,0 +1,27 @@
+.TextInput {
+  all: unset;
+  box-sizing: border-box;
+  padding: 0.5em 0.8em;
+  border: 1px solid var(--color-fade);
+  line-height: calc(22 / var(--font-size-base));
+  background-color: color-mix(in oklch, var(--color-background), transparent 12%);
+  border-radius: 4px;
+  transition: 0.2s;
+
+  &::placeholder {
+    opacity: 1;
+    font: inherit;
+    color: var(--color-fade-2);
+  }
+
+  &:hover {
+    border-color: var(--color-fade-2);
+  }
+
+  &:focus {
+    --_focus-color: var(--color-accent);
+    border-color: var(--_focus-color);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--_focus-color), transparent 70%);
+    outline: 0;
+  }
+}

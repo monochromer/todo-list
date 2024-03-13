@@ -1,0 +1,14 @@
+.FilterItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+  cursor: pointer;
+}
+
+.FilterItem\:\:Control {
+  flex: 0 0 auto;
+}
+
+.FilterItem\:\:Label {
+  flex: 0 0 auto;
+}

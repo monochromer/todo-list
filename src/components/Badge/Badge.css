@@ -1,0 +1,12 @@
+.Badge {
+  display: inline-block;
+  padding-inline: 0.1em;
+  min-width: 2em;
+  height: 2em;
+  font-size: 0.6em;
+  line-height: 2em;
+  text-align: center;
+  border-radius: 100vmax;
+  color: oklch(0 0 0);
+  background-color: oklch(0.95 0 0);
+}

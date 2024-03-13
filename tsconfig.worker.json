@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["ESNext", "WebWorker"]
+  },
+  "include": [
+    "src/service-worker/service-worker.ts"
+  ],
+  "exclude": ["node_modules/**/*"]
+}

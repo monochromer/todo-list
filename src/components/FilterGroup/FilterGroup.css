@@ -1,0 +1,17 @@
+.FilterGroup {
+  display: flex;
+  flex-direction: column;
+  column-gap: 2em;
+  row-gap: 1em;
+
+  @container (width >= calc(460 / 18 * 1rem)) {
+    flex-direction: row;
+    justify-content: center;
+  }
+}
+
+.FilterGroup\:\:Item {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}

@@ -1,0 +1,13 @@
+.EditForm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1em;
+}
+
+.EditForm\:\:Input {
+  grid-column: 1 / -1;
+  padding: 0;
+  border: 0;
+  background-color: transparent;
+  font: inherit;
+}

@@ -1,0 +1,57 @@
+.Radio {
+  all: unset;
+  position: relative;
+  box-sizing: border-box;
+  width: calc(24 / var(--font-size-base) * 1rem);
+  aspect-ratio: 1;
+  border: 1px solid var(--color-fade);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  transition-property: color, box-shadow, border, background;
+
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    border-radius: 50%;
+  }
+
+  &::before {
+    width: calc(8 / 24 * 100%);
+    aspect-ratio: 1;
+    scale: 0;
+    transition: 0.24s cubic-bezier(0.47, 0.34, 0.34, 1.77);
+    background-color: oklch(1 0 0);
+  }
+
+  &::after {
+    opacity: 1;
+    scale: 0;
+    box-sizing: border-box;
+    background-color:  color-mix(in oklch, var(--color-accent), transparent 60%);
+    transition: 0.5s;
+  }
+
+  &:checked {
+    border-color: transparent;
+    background-color: var(--color-accent);
+    color: oklch(1 0 0);
+
+    &::before {
+      scale: 1;
+    }
+
+    &::after {
+      opacity: 0;
+      scale: 2.6;
+    }
+  }
+
+  &:focus {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-accent), transparent 70%);
+  }
+}
