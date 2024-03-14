@@ -4,7 +4,7 @@
   padding: 0.5em 1em;
   border: 1px solid var(--color-fade);
   text-align: center;
-  background-color: color-mix(in oklch, var(--color-background), transparent 12%);
+  background-color: color-mix(in srgb, var(--color-background), transparent 12%);
   border-radius: 4px;
   transition: 0.3s;
   transition-property: background-color, box-shadow, color;
@@ -17,7 +17,7 @@
   &:focus {
     --_focus-color: var(--focus-color, var(--color-accent));
     border-color: var(--_focus-color);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--_focus-color), transparent 70%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--_focus-color), transparent 70%);
     outline: 0;
   }
 }

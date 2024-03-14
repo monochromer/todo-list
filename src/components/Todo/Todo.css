@@ -28,7 +28,7 @@
   background-color: transparent;
 
   &:hover {
-    background-color: color-mix(in oklch, currentColor, transparent 90%);
+    background-color: color-mix(in srgb, currentColor, transparent 90%);
   }
 }
 
@@ -45,7 +45,7 @@
   color: var(--color-fade-2);
 
   & .Todo\:\:Text {
-    --_line-color: color-mix(in oklch, currentColor, transparent 50%);
+    --_line-color: color-mix(in srgb, currentColor, transparent 50%);
     text-decoration: line-through;
     text-decoration-color: var(--_line-color);
   }

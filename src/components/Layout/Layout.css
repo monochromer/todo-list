@@ -35,7 +35,7 @@
   gap: 1rem;
   padding-block: 1rem;
   border-top: 1px solid var(--color-fade);
-  background-color: color-mix(in oklch, var(--color-background), transparent 20%);
+  background-color: color-mix(in srgb, var(--color-background), transparent 20%);
   backdrop-filter: blur(4px);
 }
 

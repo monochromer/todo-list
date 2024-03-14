@@ -40,6 +40,6 @@
 
   &:focus {
     border-color: var(--color-accent);
-    box-shadow: 0 0 0 3px color-mix(in oklch, var(--color-accent), transparent 70%);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-accent), transparent 70%);
   }
 }
