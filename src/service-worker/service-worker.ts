@@ -10,19 +10,21 @@ const CACHE_NAME = `${NAMESPACE}.cache.v${__VERSION_HASH__}`
 const resourses = __RESOURCES__
 
 self.addEventListener('install', (event) => {
+  self.skipWaiting()
   event.waitUntil((async () => {
     await addResourcesToCache(CACHE_NAME, resourses)
-    self.skipWaiting()
+    // self.skipWaiting()
   })())
 })
 
 self.addEventListener('activate', (event) => {
+  self.clients.claim()
   event.waitUntil((async () => {
     const cacheNames = await caches.keys();
     await Promise.all(cacheNames.map(async (cacheName) => {
       return cacheName !== CACHE_NAME ? await caches.delete(cacheName) : Promise.resolve()
     }))
-    self.clients.claim()
+    // self.clients.claim()
   })())
 })
 
@@ -39,7 +41,6 @@ self.addEventListener('fetch', (event) => {
     if (response) {
       return response
     }
-    const fetchResponse = await fromNetwork(event.request)
-    return fetchResponse
+    return await fromNetwork(event.request)
   })())
 })
