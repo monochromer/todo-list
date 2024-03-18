@@ -13,7 +13,6 @@ self.addEventListener('install', (event) => {
   self.skipWaiting()
   event.waitUntil((async () => {
     await addResourcesToCache(CACHE_NAME, resourses)
-    // self.skipWaiting()
   })())
 })
 
@@ -24,7 +23,6 @@ self.addEventListener('activate', (event) => {
     await Promise.all(cacheNames.map(async (cacheName) => {
       return cacheName !== CACHE_NAME ? await caches.delete(cacheName) : Promise.resolve()
     }))
-    // self.clients.claim()
   })())
 })
 
