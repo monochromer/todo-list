@@ -7,10 +7,12 @@ import esbuild from 'esbuild'
 
 // https://vitejs.dev/config/
 export default defineConfig((context) => {
+  const baseUrl = process.env.BASE_URL ?? '/'
+
   return {
     root: 'src',
     publicDir: path.join(process.cwd(), 'src', 'public'),
-    base: process.env.BASE_URL ?? '/',
+    base: baseUrl,
     build: {
       outDir: '../dist'
     },
@@ -28,6 +30,8 @@ export default defineConfig((context) => {
         async writeBundle(_, bundle) {
           const bundleFiles = Object.entries(bundle)
             .map(([, entry]) => entry.fileName)
+
+          bundleFiles.push(baseUrl)
 
           const versionHash = (() => {
             const md5Hash = crypto.createHash('md5')
