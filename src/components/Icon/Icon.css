@@ -1,6 +1,7 @@
 .Icon {
   display: inline-block;
   width: calc(24 / var(--font-size-base) * 1rem);
+  height: auto;
   aspect-ratio: 1;
   stroke-width: 2;
   stroke-linecap: round;
