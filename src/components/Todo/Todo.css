@@ -19,7 +19,6 @@
 }
 
 .Todo\:\:Button {
-  position: relative;
   padding: 0.5em;
   border: 0;
   aspect-ratio: 1;
@@ -33,8 +32,6 @@
 }
 
 .Todo\:\:Delete {
-  position: relative;
-
   &:is(:hover, :focus) {
     --focus-color: var(--color-danger);
     color: var(--color-danger);
