@@ -1,0 +1,10 @@
+.Icon {
+  display: inline-block;
+  width: calc(24 / var(--font-size-base) * 1rem);
+  aspect-ratio: 1;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke: currentColor;
+  fill: none;
+}
