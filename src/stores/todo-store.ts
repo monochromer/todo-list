@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { useLatest } from '@/libs/use-latest'
+import { useDebounce } from '@/libs/use-debounce'
 
 type TodoItem = {
   id: string;
@@ -25,6 +26,7 @@ function generateId() {
 export const useTodoStore = () => {
   const [items, setItems] = useState<TodoItem[]>(() => getTodoItemsFromLocalStorage() ?? [])
   const lastItemsRef = useLatest(items)
+  const debouncedItems = useDebounce(items, 200)
 
   const addItem = useCallback((text: TodoItem['text']) => {
     const newItems = lastItemsRef.current.slice()
@@ -64,16 +66,20 @@ export const useTodoStore = () => {
   }, [lastItemsRef])
 
   useEffect(() => {
-    function handler() {
-      saveTodoItemsToLocalStorage(items)
+    saveTodoItemsToLocalStorage(debouncedItems)
+  }, [debouncedItems])
+
+  useEffect(() => {
+    function localStorageChangeHandler() {
+      setItems(getTodoItemsFromLocalStorage() ?? [])
     }
 
-    window.addEventListener('pagehide', handler)
+    window.addEventListener('storage', localStorageChangeHandler)
 
     return () => {
-      window.removeEventListener('pagehide', handler)
+      window.removeEventListener('storage', localStorageChangeHandler)
     }
-  }, [items])
+  }, [])
 
   return {
     items,
