@@ -20,8 +20,8 @@ self.addEventListener('activate', (event) => {
   self.clients.claim()
   event.waitUntil((async () => {
     const cacheNames = await caches.keys();
-    await Promise.all(cacheNames.map(async (cacheName) => {
-      return cacheName !== CACHE_NAME ? await caches.delete(cacheName) : Promise.resolve()
+    await Promise.all(cacheNames.map((cacheName) => {
+      return cacheName !== CACHE_NAME ? caches.delete(cacheName) : Promise.resolve()
     }))
   })())
 })

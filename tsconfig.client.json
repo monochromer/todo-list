@@ -26,6 +26,7 @@
   "include": ["src"],
   "exclude": [
     "src/service-worker/service-worker.ts",
+    "src/vite-plugins/",
     "node_modules/**/*"
   ]
 }
