@@ -39,8 +39,7 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
         id: id.slice(importPrefix.length),
         fileName: outputFile,
       });
-
-      return `export default ${fileId};`
+      return `export default import.meta.ROLLUP_FILE_URL_${fileId};`;
     },
 
     async generateBundle(_options, bundle) {
