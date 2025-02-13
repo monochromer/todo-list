@@ -1,5 +1,8 @@
 # Todo List
 
-Demo of PWA (Progressive Web Application)
+Demo of PWA (Progressive Web Application).
 
-https://monochromer.github.io/todo-list/
+Link: https://monochromer.github.io/todo-list/
+
+Built with [React](https://react.dev/) and [Vite](https://vite.dev/).
+
