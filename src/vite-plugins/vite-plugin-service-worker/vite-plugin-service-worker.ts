@@ -74,17 +74,17 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
       })
     },
 
-    // transformIndexHtml() {
-    //   return [
-    //     {
-    //       tag: 'link',
-    //       attrs: {
-    //         rel: 'manifest',
-    //         href: baseUrl + 'webmanifest.json'
-    //       },
-    //       injectTo: 'head'
-    //     }
-    //   ]
-    // }
+    transformIndexHtml() {
+      return [
+        {
+          tag: 'link',
+          attrs: {
+            rel: 'manifest',
+            href: baseUrl + 'webmanifest.json'
+          },
+          injectTo: 'head'
+        }
+      ]
+    }
   }
 }
