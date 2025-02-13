@@ -46,6 +46,9 @@ jobs:
       - name: Compress static resources
         run: npx --yes @web-alchemy/web-compressor --input="./dist"
 
+      - name: Stat of files
+        run: ls -lah ./dist
+
       - name: Setup GitHub Pages
         uses: actions/configure-pages@v4
 
