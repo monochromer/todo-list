@@ -48,6 +48,7 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
       const hash = crypto.createHash('md5')
 
       for (const [fileName, chunk] of Object.entries(bundle)) {
+        // ignore `service-worker.js` file
         if (fileName === outputFile) {
           continue
         }

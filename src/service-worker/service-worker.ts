@@ -6,7 +6,7 @@ declare const __VERSION_HASH__: string
 import { addResourcesToCache, fromCache, fromNetwork } from './utils'
 
 const NAMESPACE = 'TodoList'
-const CACHE_NAME = `${NAMESPACE}.cache.v${__VERSION_HASH__}`
+const CACHE_NAME = `${NAMESPACE}.${__VERSION_HASH__}`
 const resourses = __RESOURCES__
 
 self.addEventListener('install', (event) => {
@@ -36,9 +36,6 @@ self.addEventListener('fetch', (event) => {
   }
   event.respondWith((async () => {
     const response = await fromCache(CACHE_NAME, event.request)
-    if (response) {
-      return response
-    }
-    return await fromNetwork(event.request)
+    return response ?? fromNetwork(event.request)
   })())
 })
