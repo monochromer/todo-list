@@ -39,7 +39,11 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
         id: id.slice(importPrefix.length),
         fileName: outputFile,
       });
-      return `export default import.meta.ROLLUP_FILE_URL_${fileId};`;
+      // https://github.com/rollup/rollup/issues/4713
+      // https://github.com/vitejs/vite/issues/13459
+      // return `export default import.meta.ROLLUP_FILE_URL_${fileId};`;
+      const fileUrl = `__VITE_ASSET__${fileId}__`;
+      return `export default "${fileUrl}"`;
     },
 
     async generateBundle(_options, bundle) {
