@@ -1,18 +1,21 @@
 declare let self: ServiceWorkerGlobalScope
 // injected by bundler
-declare const __RESOURCES__: string[]
-declare const __VERSION_HASH__: string
+declare const __CACHE_NAME__: string
 
 import { addResourcesToCache, fromCache, fromNetwork } from './utils'
 
-const NAMESPACE = 'TodoList'
-const CACHE_NAME = `${NAMESPACE}.${__VERSION_HASH__}`
-const resourses = __RESOURCES__
+// for early detect changes
+const CACHE_NAME = __CACHE_NAME__;
+const RESOURCES_FILE = `${CACHE_NAME}.json`;
 
 self.addEventListener('install', (event) => {
   self.skipWaiting()
   event.waitUntil((async () => {
-    await addResourcesToCache(CACHE_NAME, resourses)
+    const response = await fetch(RESOURCES_FILE, {
+      cache: 'no-store'
+    });
+    const resourses = await response.json();
+    await addResourcesToCache(CACHE_NAME, resourses);
   })())
 })
 

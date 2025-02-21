@@ -1,5 +1,7 @@
+import path from 'node:path'
+import fs from 'node:fs'
 import crypto from 'node:crypto'
-import type { Plugin } from 'vite'
+import type { Plugin, ResolvedConfig } from 'vite'
 import type { WebAppManifest } from 'web-app-manifest';
 
 type ServiceWorkerPluginOptions = {
@@ -17,12 +19,18 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
     webAppManifest
   } = options ?? {}
 
+  let config: ResolvedConfig;
+
   return {
     name: 'vite-plugin-service-worker',
 
     apply: 'build',
 
     enforce: 'post',
+
+    configResolved(cfg) {
+      config = cfg;
+    },
 
     async resolveId(id, importer) {
       if (!id.startsWith(importPrefix)) return
@@ -49,7 +57,6 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
     async generateBundle(_options, bundle) {
       const resourcesUrls = []
       const hash = crypto.createHash('md5')
-
       for (const [fileName, chunk] of Object.entries(bundle)) {
         // ignore `service-worker.js` file
         if (fileName === outputFile) {
@@ -58,14 +65,20 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
         resourcesUrls.push(fileName === 'index.html' ? baseUrl : baseUrl + fileName)
         hash.update(chunk.type === 'chunk' ? chunk.code : chunk.source)
       }
-
       const hashVersion = hash.digest('hex')
+
+      const cacheName = `TodoList.${hashVersion}`;
+      const resourcesFile = `${cacheName}.json`
+
+      await fs.promises.writeFile(
+        path.join(config.root, config.build.outDir, resourcesFile),
+        JSON.stringify(resourcesUrls)
+      )
 
       const serviceWorkerChunk = bundle[outputFile]
       if (serviceWorkerChunk.type === 'chunk') {
         serviceWorkerChunk.code = [
-          `const __VERSION_HASH__ = ${JSON.stringify(hashVersion)};`,
-          `const __RESOURCES__ = ${JSON.stringify(resourcesUrls)};`,
+          `const __CACHE_NAME__ = ${JSON.stringify(cacheName)};`,
           serviceWorkerChunk.code
         ].join('')
       }
