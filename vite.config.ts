@@ -13,7 +13,17 @@ export default defineConfig(() => {
     publicDir: path.join(process.cwd(), 'src', 'public'),
     base: baseUrl,
     build: {
-      outDir: '../dist'
+      outDir: '../dist',
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (id.includes('node_modules')) {
+              return 'vendor';
+            }
+            return null;
+          }
+        }
+      }
     },
     resolve: {
       alias: {
