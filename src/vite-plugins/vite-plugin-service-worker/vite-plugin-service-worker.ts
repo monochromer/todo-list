@@ -24,8 +24,6 @@ export function serviceWorkerPlugin(options?: ServiceWorkerPluginOptions): Plugi
   return {
     name: 'vite-plugin-service-worker',
 
-    apply: 'build',
-
     enforce: 'post',
 
     configResolved(cfg) {
