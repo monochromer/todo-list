@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react'
-import { useLatest } from '@/libs/use-latest'
-import { useDebounce } from '@/libs/use-debounce'
+import { useCallback, useEffect, useRef } from 'react'
+import { useForceUpdate } from '@/libs/use-force-update'
+import { debounce } from '@/libs/debounce'
 
 type TodoItem = {
   id: string;
@@ -11,12 +11,22 @@ type TodoItem = {
 const LOCAL_STORAGE_KEY = 'todo-list-items'
 
 function getTodoItemsFromLocalStorage() {
-  const rawData = localStorage.getItem(LOCAL_STORAGE_KEY)
-  return rawData ? JSON.parse(rawData) as TodoItem[] : null
+  try {
+    const rawData = localStorage.getItem(LOCAL_STORAGE_KEY)
+    return rawData ? JSON.parse(rawData) as TodoItem[] : []
+  } catch {
+    return []
+  }
 }
 
-function saveTodoItemsToLocalStorage(data: TodoItem[]) {
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data));
+function prepareItems() {
+  return new Map((getTodoItemsFromLocalStorage()).map((item) => [item.id, item]))
+}
+
+function saveTodoItemsToLocalStorage(map: Map<TodoItem['id'], TodoItem>) {
+  const data = [...map.values()]
+  const serializedData = JSON.stringify(data)
+  localStorage.setItem(LOCAL_STORAGE_KEY, serializedData)
 }
 
 function generateId() {
@@ -24,54 +34,51 @@ function generateId() {
 }
 
 export const useTodoStore = () => {
-  const [items, setItems] = useState<TodoItem[]>(() => getTodoItemsFromLocalStorage() ?? [])
-  const lastItemsRef = useLatest(items)
-  const debouncedItems = useDebounce(items, 200)
+  const update = useForceUpdate()
+  const itemsRef = useRef<Map<TodoItem['id'], TodoItem>>(prepareItems())
 
   const addItem = useCallback((text: TodoItem['text']) => {
-    const newItems = lastItemsRef.current.slice()
-    newItems.push({
-      id: generateId(),
+    const id = generateId()
+    itemsRef.current.set(id, {
+      id,
       done: false,
-      text
+      text,
     })
-    setItems(newItems)
-  }, [lastItemsRef])
+    update()
+  }, [itemsRef, update])
 
   const removeItem = useCallback((id: TodoItem['id']) => {
-    const newItems = lastItemsRef.current.filter((item) => item.id !== id)
-    setItems(newItems)
-  }, [lastItemsRef])
+    itemsRef.current.delete(id)
+    update()
+  }, [itemsRef, update])
 
   const toggleItem = useCallback((id: TodoItem['id']) => {
-    const newItems = lastItemsRef.current.map((item) => {
-      if (item.id === id) {
-        item.done = !item.done
-      }
-      return item
-    })
-    setItems(newItems)
-
-  }, [lastItemsRef])
+    const item = itemsRef.current?.get(id)
+    if (!item) {
+      return
+    }
+    item.done = !item.done;
+    itemsRef.current.set(id, item)
+    update()
+  }, [itemsRef, update])
 
   const changeItemText = useCallback((id: TodoItem['id'], text: TodoItem['text']) => {
-    const newItems = lastItemsRef.current.map((item) => {
-      if (item.id === id) {
-        item.text = text;
+    const item = itemsRef.current?.get(id)
+    if (!item) {
+      return
+    }
+    item.text = text;
+    itemsRef.current.set(id, item)
+    update()
+  }, [itemsRef, update])
+
+  useEffect(() => {
+    function localStorageChangeHandler(event: StorageEvent) {
+      if (event.key !== LOCAL_STORAGE_KEY) {
+        return
       }
-
-      return item;
-    })
-    setItems(newItems)
-  }, [lastItemsRef])
-
-  useEffect(() => {
-    saveTodoItemsToLocalStorage(debouncedItems)
-  }, [debouncedItems])
-
-  useEffect(() => {
-    function localStorageChangeHandler() {
-      setItems(getTodoItemsFromLocalStorage() ?? [])
+      itemsRef.current = prepareItems()
+      update()
     }
 
     window.addEventListener('storage', localStorageChangeHandler)
@@ -79,10 +86,32 @@ export const useTodoStore = () => {
     return () => {
       window.removeEventListener('storage', localStorageChangeHandler)
     }
-  }, [])
+  }, [update])
+
+  useEffect(() => {
+    const handler = debounce(() => {
+      saveTodoItemsToLocalStorage(itemsRef.current)
+    }, 0)
+
+    const controller = new AbortController()
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' ) {
+        handler()
+      }
+    }, { signal: controller.signal })
+    window.addEventListener('pagehide', handler, { signal: controller.signal })
+
+    return () => {
+      controller.abort()
+    }
+  }, [itemsRef])
 
   return {
-    items,
+    get items() {
+      const map = itemsRef.current;
+      return map ? [...map.values()] : []
+    },
     addItem,
     removeItem,
     changeItemText,
