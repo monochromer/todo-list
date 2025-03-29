@@ -81,10 +81,14 @@ export const useTodoStore = () => {
       update()
     }
 
-    window.addEventListener('storage', localStorageChangeHandler)
+    const controller = new AbortController()
+
+    window.addEventListener('storage', localStorageChangeHandler, {
+      signal: controller.signal
+    })
 
     return () => {
-      window.removeEventListener('storage', localStorageChangeHandler)
+      controller.abort()
     }
   }, [update])
 
@@ -100,6 +104,7 @@ export const useTodoStore = () => {
         handler()
       }
     }, { signal: controller.signal })
+
     window.addEventListener('pagehide', handler, { signal: controller.signal })
 
     return () => {
